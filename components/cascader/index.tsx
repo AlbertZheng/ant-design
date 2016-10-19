@@ -117,7 +117,7 @@ export default class Cascader extends React.Component<CascaderProps, any> {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value || props.defautValue || [],
+      value: props.value || props.defaultValue || [],
       inputValue: '',
       inputFocused: false,
       popupVisible: false,
@@ -307,7 +307,8 @@ export default class Cascader extends React.Component<CascaderProps, any> {
       dropdownMenuColumnStyle.width = this.refs.input.refs.input.offsetWidth;
     }
     return (
-      <RcCascader {...props}
+      <RcCascader
+        {...props}
         options={options}
         value={value}
         popupVisible={state.popupVisible}
@@ -320,7 +321,8 @@ export default class Cascader extends React.Component<CascaderProps, any> {
             style={style}
             className={pickerCls}
           >
-            <Input {...inputProps}
+            <Input
+              {...inputProps}
               ref="input"
               placeholder={value && value.length > 0 ? null : placeholder}
               className={`${prefixCls}-input ${sizeCls}`}
@@ -332,7 +334,9 @@ export default class Cascader extends React.Component<CascaderProps, any> {
               onBlur={showSearch ? this.handleInputBlur : null}
               onChange={showSearch ? this.handleInputChange : null}
             />
-            <span className={`${prefixCls}-picker-label`}>{this.getLabel()}</span>
+            <span className={`${prefixCls}-picker-label`}>
+              {this.getLabel()}
+            </span>
             {clearIcon}
             <Icon type="down" className={arrowCls} />
           </span>

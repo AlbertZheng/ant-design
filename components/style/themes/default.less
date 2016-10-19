@@ -61,13 +61,13 @@
 @background-color-base  : #f7f7f7;        // basic gray background
 
 // Shadow
-@shadow-color           : rgba(100, 100, 100, .2);
+@shadow-color           : rgba(0, 0, 0, .2);
 @box-shadow-base        : @shadow-1-down;
 @shadow-1-up            : 0 -1px 6px @shadow-color;
 @shadow-1-down          : 0 1px 6px @shadow-color;
 @shadow-1-left          : -1px 0 6px @shadow-color;
 @shadow-1-right         : 1px 0 6px @shadow-color;
-@shadow-2               : 0 1px 8px @shadow-color;
+@shadow-2               : 0 2px 8px @shadow-color;
 
 // Buttons
 @btn-font-weight        : 500;
@@ -193,8 +193,6 @@
 @popover-bg: #fff;
 //** Popover maximum width
 @popover-min-width: 177px;
-//** Popover border color
-@popover-border-color: @border-color-base;
 //** Popover arrow width
 @popover-arrow-width: 4px;
 //** Popover arrow color
@@ -202,4 +200,4 @@
 //** Popover outer arrow width
 @popover-arrow-outer-width: (@popover-arrow-width + 1);
 //** Popover outer arrow color
-@popover-arrow-outer-color: fadein(@popover-border-color, 5%);
+@popover-arrow-outer-color: fadeout(@border-color-base, 30%);
