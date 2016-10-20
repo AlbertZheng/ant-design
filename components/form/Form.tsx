@@ -20,7 +20,7 @@ export interface FormProps {
   inline?: boolean;
   vertical?: boolean;
   form?: WrappedFormUtils;
-  onSubmit?: React.FormEventHandler;
+  onSubmit?: React.FormEventHandler<any>;
   style?: React.CSSProperties;
   className?: string;
   prefixCls?: string;
@@ -103,8 +103,9 @@ export default class Form extends React.Component<FormProps, any> {
   static Item = FormItem;
 
   static create = (options?: FormCreateOption): ComponentDecorator => {
-    const formWrapper = createDOMForm(assign({}, options, {
+    const formWrapper = createDOMForm(assign({
       fieldNameProp: 'id',
+    }, options, {
       fieldMetaProp: FIELD_META_PROP,
     }));
 
