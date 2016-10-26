@@ -22,8 +22,6 @@ export default class Tag extends React.Component<TagProps, any> {
   static defaultProps = {
     prefixCls: 'ant-tag',
     closable: false,
-    onClose() { },
-    afterClose() { },
   };
 
   constructor(props) {
@@ -36,7 +34,10 @@ export default class Tag extends React.Component<TagProps, any> {
   }
 
   close = (e) => {
-    this.props.onClose(e);
+    const onClose = this.props.onClose;
+    if (onClose) {
+      onClose(e);
+    }
     if (e.defaultPrevented) {
       return;
     }
@@ -49,13 +50,17 @@ export default class Tag extends React.Component<TagProps, any> {
     });
   }
 
-  animationEnd = (key, existed) => {
+  animationEnd = (_, existed) => {
     if (!existed && !this.state.closed) {
       this.setState({
         closed: true,
         closing: false,
       });
-      this.props.afterClose();
+
+      const afterClose = this.props.afterClose;
+      if (afterClose) {
+        afterClose();
+      }
     }
   }
 

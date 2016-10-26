@@ -15,7 +15,7 @@ export interface FormItemLabelColOption {
 export interface FormItemProps {
   prefixCls?: string;
   id?: string;
-  label?: string | React.ReactNode;
+  label?: React.ReactNode;
   labelCol?: FormItemLabelColOption;
   wrapperCol?: FormItemLabelColOption;
   help?: React.ReactNode;
@@ -26,12 +26,14 @@ export interface FormItemProps {
   required?: boolean;
   style?: React.CSSProperties;
   colon?: boolean;
+  children: any;
 }
 
 export interface FormItemContext {
   form: WrappedFormUtils;
 }
 
+let autoGenerateWarning = false;
 export default class FormItem extends React.Component<FormItemProps, any> {
   static defaultProps = {
     hasFeedback: false,
@@ -60,11 +62,14 @@ export default class FormItem extends React.Component<FormItemProps, any> {
   context: FormItemContext;
 
   componentDidMount() {
-    warning(
-      !(this.getControls(this.props.children, true).length > 1),
-      '`Form.Item` cannot generate `validateStatus` and `help` automatically, ' +
-      'while there are more than one `getFieldDecorator` in it.'
-    );
+    if (!autoGenerateWarning && (this.getControls(this.props.children, true).length > 1)) {
+      autoGenerateWarning = true;
+      warning(
+        false,
+        '`Form.Item` cannot generate `validateStatus` and `help` automatically, ' +
+        'while there are more than one `getFieldDecorator` in it.'
+      );
+    }
   }
 
   shouldComponentUpdate(...args) {
@@ -82,7 +87,7 @@ export default class FormItem extends React.Component<FormItemProps, any> {
   }
 
   getControls(children, recursively) {
-    let controls = [];
+    let controls: React.ReactElement<any>[] = [];
     const childrenArray = React.Children.toArray(children);
     for (let i = 0; i < childrenArray.length; i++) {
       if (!recursively && controls.length > 0) {
@@ -216,7 +221,7 @@ export default class FormItem extends React.Component<FormItemProps, any> {
 
     // remove user input colon
     let label = props.label;
-    if (typeof label === 'string' && label.trim() !== '') {
+    if (typeof label === 'string' && (label as string).trim() !== '') {
       label = (props.label as string).replace(/[：|:]\s*$/, '');
     }
 
