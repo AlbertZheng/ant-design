@@ -11,7 +11,7 @@ title:
 
 ## en-US
 
-Rows can be selectable by making fisrt column as a selectable column.
+Rows can be selectable by making first column as a selectable column.
 
 ````jsx
 import { Table } from 'antd';
@@ -46,13 +46,13 @@ const data = [{
 
 // rowSelection object indicates the need for row selection
 const rowSelection = {
-  onChange(selectedRowKeys, selectedRows) {
+  onChange: (selectedRowKeys, selectedRows) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
-  onSelect(record, selected, selectedRows) {
+  onSelect: (record, selected, selectedRows) => {
     console.log(record, selected, selectedRows);
   },
-  onSelectAll(selected, selectedRows, changeRows) {
+  onSelectAll: (selected, selectedRows, changeRows) => {
     console.log(selected, selectedRows, changeRows);
   },
 };

@@ -3,7 +3,6 @@ import moment from 'moment';
 import MonthCalendar from 'rc-calendar/lib/MonthCalendar';
 import RcDatePicker from 'rc-calendar/lib/Picker';
 import classNames from 'classnames';
-import assign from 'object-assign';
 import omit from 'omit.js';
 import Icon from '../icon';
 
@@ -19,6 +18,7 @@ export default function createPicker(TheCalendar) {
       return {
         prefixCls: 'ant-calendar',
         allowClear: true,
+        showToday: true,
       };
     },
 
@@ -31,9 +31,10 @@ export default function createPicker(TheCalendar) {
     },
 
     componentWillReceiveProps(nextProps: PickerProps) {
-      if ('value' in nextProps) {
+      if (nextProps.value !== undefined) {
         this.setState({
           value: nextProps.value,
+          tempValue: nextProps.value,
         });
       }
     },
@@ -47,27 +48,35 @@ export default function createPicker(TheCalendar) {
 
     handleChange(value) {
       const props = this.props;
-      if (!('value' in props)) {
+      if (props.value === undefined) {
         this.setState({ value });
       }
       props.onChange(value, (value && value.format(props.format)) || '');
     },
 
     handleTempChange(tempValue) {
-      if (!('value' in this.props)) {
-        this.setState({ tempValue });
-      }
+      this.setState({ tempValue });
     },
 
-    // Clear temp value when hide picker panel
+    // Clear temp value and trigger onChange when hide DatePicker[showTime] panel
     handleOpenChange(open) {
+      const { showTime, onOpenChange, onChange, format } = this.props;
       if (!open) {
-        this.setState({
-          tempValue: undefined,
+        // tricky code to avoid triggering onChange multiple times
+        // when click `Now` button
+        let tempValue;
+        this.setState(prevState => {
+          tempValue = prevState.tempValue;
+          const nextState = { tempValue: undefined } as any;
+          if (showTime && tempValue) {
+            nextState.value = tempValue;
+            onChange(tempValue, (tempValue && tempValue.format(format)) || '');
+          }
+          return nextState;
         });
       }
-      if (this.props.onOpenChange) {
-        this.props.onOpenChange(open);
+      if (onOpenChange) {
+        onOpenChange(open);
       }
     },
 
@@ -91,14 +100,9 @@ export default function createPicker(TheCalendar) {
       let calendarHandler: Object = {};
       if (props.showTime) {
         calendarHandler = {
-          onOk: this.handleChange,
           // fix https://github.com/ant-design/ant-design/issues/1902
-          onSelect: (value, cause) => {
-            if (cause && cause.source === 'todayButton') {
-              this.handleChange(value);
-            } else {
-              this.handleTempChange(value);
-            }
+          onSelect: (value) => {
+            this.handleTempChange(value);
           },
         };
       } else {
@@ -109,6 +113,7 @@ export default function createPicker(TheCalendar) {
 
       const calendar = (
         <TheCalendar
+          {...calendarHandler}
           disabledDate={props.disabledDate}
           disabledTime={disabledTime}
           locale={locale.lang}
@@ -119,15 +124,9 @@ export default function createPicker(TheCalendar) {
           className={calendarClassName}
           onOk={props.onOk}
           format={props.format}
-          {...calendarHandler}
+          showToday={props.showToday}
         />
       );
-
-      // default width for showTime
-      const pickerStyle: { width?: number } = {};
-      if (props.showTime) {
-        pickerStyle.width = 180;
-      }
 
       const clearIcon = (!props.disabled && props.allowClear && this.state.value) ?
         <Icon type="cross-circle"
@@ -135,7 +134,7 @@ export default function createPicker(TheCalendar) {
           onClick={this.clearSelection}
         /> : null;
       return (
-        <span className={props.pickerClass} style={assign({}, pickerStyle, props.style)}>
+        <span className={props.pickerClass} style={props.style}>
           <RcDatePicker
             {...props}
             {...pickerChangeHandler}

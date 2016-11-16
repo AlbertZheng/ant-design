@@ -1,13 +1,13 @@
 ---
 order: 1
 title:
-  zh-CN: 登陆框
+  zh-CN: 登录框
   en-US: Login Form
 ---
 
 ## zh-CN
 
-普通的登陆框，可以容纳更多的元素。
+普通的登录框，可以容纳更多的元素。
 
 ## en-US
 
@@ -20,13 +20,10 @@ const FormItem = Form.Item;
 const NormalLoginForm = Form.create()(React.createClass({
   handleSubmit(e) {
     e.preventDefault();
-
     this.props.form.validateFields((err, values) => {
-      if (err) {
-        return;
+      if (!err) {
+        console.log('Received values of form: ', values);
       }
-
-      console.log('Received values of form: ', values);
     });
   },
   render() {

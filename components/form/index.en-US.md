@@ -1,6 +1,6 @@
 ---
 category: Components
-type: Form Controls
+type: Data Entry
 cols: 1
 title: Form
 ---
@@ -70,16 +70,15 @@ If the form has been decorated by `Form.create` then it has `this.props.form` pr
 | validateFieldsAndScroll | This function is similar to `validateFields`, but after validation, if the target field is not in visible area of form, form will be automatically scrolled to the target field area. | same as `validateFields` |
 | getFieldError | Get the error of a field. | Function(name) |
 | isFieldValidating | Check if the specified field is being validated. | Function(name) |
-| resetFields | Reset the specified fields' value and status. If you don't specify a parameter, all the fields will be reset. | Function([names: string[]]) |
+| resetFields | Reset the specified fields' value(to `initialValue`) and status. If you don't specify a parameter, all the fields will be reset. | Function([names: string[]]) |
 | getFieldDecorator | Two-way binding for form, please read below for details. | |
 
 ### this.props.form.getFieldDecorator(id, options)
 
-After wrapped by `getFieldDecorator`, `value` `onChange` props will be added to form controls，the flow of form data will be handled by Form which will cause:
+After wrapped by `getFieldDecorator`, `value`(or other property defined by `valuePropName`) `onChange`(or other property defined by `trigger`) props will be added to form controls，the flow of form data will be handled by Form which will cause:
 
-
-1. You don't need to use `onChange` and should not add `value` `onChange` to controls. (There are warnings after `antd@2.0`)
-2. You can not set default value via `defaultValue` prop, you should use `initialValue` in `getFieldDecorator` instead.
+1. You don't need to use `onChange` to collect data, but you still can listen to `onChange`(and so on) events.
+2. You can not set value of form control via `value` `defaultValue` prop, and you should set default value with `initialValue` in `getFieldDecorator` instead.
 3. You don't need to call `setState` manully, please use `this.props.form.setFieldsValue` to change value programmatically.
 
 #### Special attention

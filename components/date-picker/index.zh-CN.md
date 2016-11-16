@@ -1,6 +1,6 @@
 ---
 category: Components
-type: Form Controls
+type: Data Entry
 title: DatePicker
 subtitle: 日期选择框
 ---
@@ -13,17 +13,20 @@ subtitle: 日期选择框
 
 ## API
 
-注意：DatePicker、MonthPicker、RangePicker 部分 locale 是从 value 中读取，所以请先正确设置 moment 的 locale。
+日期类组件包括以下三种形式。
+
+* DatePicker
+* MonthPicker
+* RangePicker
+
+**注意：**DatePicker、MonthPicker、RangePicker 部分 locale 是从 value 中读取，所以请先正确设置 moment 的 locale。
 
 ```jsx
-import moment from 'moment-timezone/moment-timezone';
+import moment from 'moment';
 
-// 推荐在入口文件全局设置 locale 与时区
+// 推荐在入口文件全局设置 locale
 import 'moment/locale/zh-cn';
 moment.locale('zh-cn');
-// 从 https://github.com/moment/moment-timezone/blob/develop/data/packed/latest.json 复制
-moment.tz.add('Asia/Shanghai|CST CDT|-80 -90|01010101010101010|-1c1I0 LX0 16p0 1jz0 1Myp0 Rb0 1o10 11z0 1o10 11z0 1qN0 11z0 1o10 11z0 1o10 11z0|23e6');
-moment.tz.setDefault('Asia/Shanghai')
 
 <DatePicker defaultValue={moment('2015-01-01', 'YYYY-MM-DD')} />
 ```
@@ -54,6 +57,8 @@ moment.tz.setDefault('Asia/Shanghai')
 | open | 控制弹层是否展开 | bool | - |
 | onOpenChange   | 弹出日历和关闭日历的回调 | function(status) | 无 |
 | showTime     | 增加时间选择功能  | Object or Boolean | [TimePicker Options](/components/time-picker/#api) |
+| showToday    | 是否展示“今天”按钮 | Boolean | true |
+| disabledTime | 不可选择的时间 | function(date) | 无 |
 
 ### MonthPicker
 
@@ -63,6 +68,8 @@ moment.tz.setDefault('Asia/Shanghai')
 | defaultValue | 默认日期       | [moment](http://momentjs.com/)   | 无           |
 | format       | 展示的日期格式，配置参考 [moment.js](http://momentjs.com/) | string   | "YYYY-MM" |
 | onChange     | 时间发生变化的回调，发生在用户选择时间时 | function(date: moment, dateString: string) | 无           |
+| monthCellContentRender | 自定义的月份渲染方法 | function | 无 |
+| cellContentRender | 自定义的月份渲染方法，内容会被附加在月份后面 | function | 无 |
 
 ### RangePicker
 

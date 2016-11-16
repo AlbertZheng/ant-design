@@ -1,12 +1,12 @@
 import React from 'react';
 import { PropTypes } from 'react';
 import classNames from 'classnames';
+import createDOMForm from 'rc-form/lib/createDOMForm';
 import PureRenderMixin from 'rc-util/lib/PureRenderMixin';
 import omit from 'omit.js';
-import warning from 'warning';
 import assign from 'object-assign';
+import warning from '../_util/warning';
 import FormItem from './FormItem';
-import createDOMForm from 'rc-form/lib/createDOMForm';
 import { FIELD_META_PROP } from './constants';
 
 export interface FormCreateOption {
@@ -81,8 +81,6 @@ export interface ComponentDecorator {
   <T extends (typeof FormComponent)>(component: T): T;
 }
 
-let warnedGetFieldProps = false;
-
 export default class Form extends React.Component<FormProps, any> {
   static defaultProps = {
     prefixCls: 'ant-form',
@@ -123,24 +121,17 @@ export default class Form extends React.Component<FormProps, any> {
         };
       },
       componentWillMount() {
-        if (!warnedGetFieldProps) {
-          this.getFieldProps = this.props.form.getFieldProps;
-        }
+        this.__getFieldProps = this.props.form.getFieldProps;
       },
       deprecatedGetFieldProps(name, option) {
-        if (!warnedGetFieldProps) {
-          warnedGetFieldProps = true;
-          warning(
-            false,
-            '`getFieldProps` is not recommended, please use `getFieldDecorator` instead'
-          );
-        }
-        return this.getFieldProps(name, option);
+        warning(
+          false,
+          '`getFieldProps` is not recommended, please use `getFieldDecorator` instead'
+        );
+        return this.__getFieldProps(name, option);
       },
       render() {
-        if (!warnedGetFieldProps) {
-          this.props.form.getFieldProps = this.deprecatedGetFieldProps;
-        }
+        this.props.form.getFieldProps = this.deprecatedGetFieldProps;
 
         const withRef: any = {};
         if (options && options.withRef) {

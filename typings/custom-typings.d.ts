@@ -75,3 +75,11 @@ declare module 'rc-upload';
 declare module 'rc-collapse';
 
 declare module 'rc-form*';
+
+declare module 'react-lazy-load';
+
+declare var process: {
+  env: {
+    NODE_ENV: string
+  }
+};

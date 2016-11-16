@@ -50,13 +50,10 @@ const RegistrationForm = Form.create()(React.createClass({
   },
   handleSubmit(e) {
     e.preventDefault();
-
-    this.props.form.validateFields((err, values) => {
-      if (err) {
-        return;
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
       }
-
-      console.log('Received values of form: ', values);
     });
   },
   handlePasswordBlur(e) {
@@ -76,7 +73,6 @@ const RegistrationForm = Form.create()(React.createClass({
     if (value && this.state.passwordDirty) {
       form.validateFields(['confirm'], { force: true });
     }
-
     callback();
   },
   render() {
@@ -84,6 +80,12 @@ const RegistrationForm = Form.create()(React.createClass({
     const formItemLayout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 14 },
+    };
+    const tailFormItemLayout = {
+      wrapperCol: {
+        span: 14,
+        offset: 6,
+      },
     };
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: '86',
@@ -195,19 +197,15 @@ const RegistrationForm = Form.create()(React.createClass({
             </Col>
           </Row>
         </FormItem>
-        <FormItem>
-          <Row>
-            <Col span={14} offset={6}>
-              <p>
-                {getFieldDecorator('agreement', {
-                  valuePropName: 'checked',
-                })(
-                  <Checkbox>I had read the <a>agreement</a></Checkbox>
-                )}
-              </p>
-              <Button type="primary" htmlType="submit" size="large">Register</Button>
-            </Col>
-          </Row>
+        <FormItem {...tailFormItemLayout} style={{ marginBottom: 8 }}>
+          {getFieldDecorator('agreement', {
+            valuePropName: 'checked',
+          })(
+            <Checkbox>I had read the <a>agreement</a></Checkbox>
+          )}
+        </FormItem>
+        <FormItem {...tailFormItemLayout}>
+          <Button type="primary" htmlType="submit" size="large">Register</Button>
         </FormItem>
       </Form>
     );

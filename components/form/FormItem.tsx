@@ -1,11 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
-import warning from 'warning';
 import PureRenderMixin from 'rc-util/lib/PureRenderMixin';
 import Row from '../row';
 import Col from '../col';
 import { WrappedFormUtils } from './Form';
 import { FIELD_META_PROP } from './constants';
+import warning from '../_util/warning';
 
 export interface FormItemLabelColOption {
   span: number;
@@ -26,14 +26,12 @@ export interface FormItemProps {
   required?: boolean;
   style?: React.CSSProperties;
   colon?: boolean;
-  children: any;
 }
 
 export interface FormItemContext {
   form: WrappedFormUtils;
 }
 
-let autoGenerateWarning = false;
 export default class FormItem extends React.Component<FormItemProps, any> {
   static defaultProps = {
     hasFeedback: false,
@@ -62,14 +60,11 @@ export default class FormItem extends React.Component<FormItemProps, any> {
   context: FormItemContext;
 
   componentDidMount() {
-    if (!autoGenerateWarning && (this.getControls(this.props.children, true).length > 1)) {
-      autoGenerateWarning = true;
-      warning(
-        false,
-        '`Form.Item` cannot generate `validateStatus` and `help` automatically, ' +
-        'while there are more than one `getFieldDecorator` in it.'
-      );
-    }
+    warning(
+      this.getControls(this.props.children, true).length <= 1,
+      '`Form.Item` cannot generate `validateStatus` and `help` automatically, ' +
+      'while there are more than one `getFieldDecorator` in it.'
+    );
   }
 
   shouldComponentUpdate(...args) {
@@ -86,7 +81,7 @@ export default class FormItem extends React.Component<FormItemProps, any> {
     return props.help;
   }
 
-  getControls(children, recursively) {
+  getControls(children, recursively: boolean) {
     let controls: React.ReactElement<any>[] = [];
     const childrenArray = React.Children.toArray(children);
     for (let i = 0; i < childrenArray.length; i++) {
@@ -239,7 +234,7 @@ export default class FormItem extends React.Component<FormItemProps, any> {
 
   renderChildren() {
     const props = this.props;
-    const children = React.Children.map(props.children, (child: React.ReactElement<any>) => {
+    const children = React.Children.map(props.children as React.ReactNode, (child: React.ReactElement<any>) => {
       if (child && typeof child.type === 'function' && !child.props.size) {
         return React.cloneElement(child, { size: 'large' });
       }

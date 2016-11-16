@@ -1,31 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Animate from 'rc-animate';
-import Icon from '../icon';
 import classNames from 'classnames';
-import splitObject from '../_util/splitObject';
 import omit from 'omit.js';
+import assign from 'object-assign';
+import Icon from '../icon';
+import warning from '../_util/warning';
+import splitObject from '../_util/splitObject';
+import CheckableTag from './CheckableTag';
 
 export interface TagProps {
+  color?: string;
   /** 标签是否可以关闭 */
   closable?: boolean;
   /** 关闭时的回调 */
   onClose?: Function;
   /** 动画关闭后的回调 */
   afterClose?: Function;
-  /** 标签的色彩 */
-  color?: string;
   style?: React.CSSProperties;
 }
 
 export default class Tag extends React.Component<TagProps, any> {
+  static CheckableTag = CheckableTag;
   static defaultProps = {
     prefixCls: 'ant-tag',
     closable: false,
   };
 
-  constructor(props) {
+  constructor(props: TagProps) {
     super(props);
+    warning(
+      !/blue|red|green|yellow/.test(props.color || ''),
+      '`Tag[color=red|green|blue|yellow]` is deprecated, ' +
+        'please set color by `#abc` or `rgb(a, b, c)` instead.'
+    );
 
     this.state = {
       closing: false,
@@ -66,10 +74,10 @@ export default class Tag extends React.Component<TagProps, any> {
 
   render() {
     const [{
-      prefixCls, closable, color, className, children,
+      prefixCls, closable, color, className, children, style,
     }, otherProps] = splitObject(
       this.props,
-      ['prefixCls', 'closable', 'color', 'className', 'children']
+      ['prefixCls', 'closable', 'color', 'className', 'children', 'style']
     );
     const closeIcon = closable ? <Icon type="cross" onClick={this.close} /> : '';
     const classString = classNames({
@@ -85,18 +93,21 @@ export default class Tag extends React.Component<TagProps, any> {
       'afterClose',
     ]);
     return (
-      <Animate component=""
+      <Animate
+        component=""
         showProp="data-show"
         transitionName={`${prefixCls}-zoom`}
         transitionAppear
         onEnd={this.animationEnd}
-        >
+      >
         {this.state.closed ? null : (
           <div
             data-show={!this.state.closing}
             {...divProps}
             className={classString}
-            style={{ backgroundColor: /blue|red|green|yellow/.test(color) ? null : color }}
+            style={assign({
+              backgroundColor: /blue|red|green|yellow/.test(color) ? null : color,
+            }, style)}
           >
             <span className={`${prefixCls}-text`}>{children}</span>
             {closeIcon}

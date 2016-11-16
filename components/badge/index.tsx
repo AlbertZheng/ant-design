@@ -2,7 +2,7 @@ import React from 'react';
 import Animate from 'rc-animate';
 import ScrollNumber from './ScrollNumber';
 import classNames from 'classnames';
-import warning from 'warning';
+import warning from '../_util/warning';
 import splitObject from '../_util/splitObject';
 
 export interface BadgeProps {
@@ -89,7 +89,7 @@ export default class Badge extends React.Component<BadgeProps, any> {
         <Animate
           component=""
           showProp="data-show"
-          transitionName={`${prefixCls}-zoom`}
+          transitionName={children ? `${prefixCls}-zoom` : ''}
           transitionAppear
         >
           {

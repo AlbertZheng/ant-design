@@ -1,13 +1,13 @@
 ---
 order: 0
 title:
-  zh-CN: 水平登陆栏
+  zh-CN: 水平登录栏
   en-US: Horizontal Login Form
 ---
 
 ## zh-CN
 
-水平登陆栏，常用在顶部导航栏中。
+水平登录栏，常用在顶部导航栏中。
 
 ## en-US
 
@@ -20,13 +20,10 @@ const FormItem = Form.Item;
 const HorizontalLoginForm = Form.create()(React.createClass({
   handleSubmit(e) {
     e.preventDefault();
-
     this.props.form.validateFields((err, values) => {
-      if (err) {
-        return;
+      if (!err) {
+        console.log('Received values of form: ', values);
       }
-
-      console.log('Received values of form: ', values);
     });
   },
   render() {

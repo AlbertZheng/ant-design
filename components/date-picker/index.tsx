@@ -31,15 +31,18 @@ export interface SinglePickerProps {
 
 export interface DatePickerProps extends PickerProps, SinglePickerProps {
   showTime?: TimePickerProps | boolean;
+  showToday?: boolean;
   open?: boolean;
   toggleOpen?: (e: {open: boolean}) => void;
   disabledDate?: (current: moment.Moment) => boolean;
   onOpenChange?: (status: boolean) => void;
+  placeholder?: string;
 }
 const DatePicker = wrapPicker(createPicker(RcCalendar)) as React.ClassicComponentClass<DatePickerProps>;
 
 export interface MonthPickerProps extends PickerProps, SinglePickerProps {
   disabledDate?: (current: moment.Moment) => boolean;
+  placeholder?: string;
 }
 const MonthPicker = wrapPicker(createPicker(MonthCalendar), 'YYYY-MM');
 
@@ -52,7 +55,7 @@ export interface RangePickerProps extends PickerProps {
 }
 
 assign(DatePicker, {
-  RangePicker: wrapPicker(RangePicker),
+  RangePicker: wrapPicker(RangePicker, 'YYYY-MM-DD hh:mm:ss'),
   Calendar,
   MonthPicker,
 });
