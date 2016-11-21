@@ -4,7 +4,7 @@ import AnchorHelper, { scrollTo } from './anchorHelper';
 
 export interface AnchorLinkProps {
   href: string;
-  onClick: (href: string) => void;
+  onClick: (href: string, component: Element) => void;
   active?: boolean;
   prefixCls?: string;
   children?: any;
@@ -19,10 +19,6 @@ export default class AnchorLink extends React.Component<AnchorLinkProps, any> {
     anchorHelper: React.PropTypes.any,
   };
 
-  static childContextTypes = {
-    anchorHelper: React.PropTypes.any,
-  };
-
   static defaultProps = {
     href: '#',
     prefixCls: 'ant-anchor',
@@ -32,14 +28,23 @@ export default class AnchorLink extends React.Component<AnchorLinkProps, any> {
     anchorHelper: AnchorHelper;
   };
 
-  constructor(props, context) {
-    super(props, context);
+  private _component: Element;
+
+  setActiveAnchor() {
+    const { bounds, href, affix } = this.props;
+    const { anchorHelper } = this.context;
+    const active = affix && anchorHelper && anchorHelper.getCurrentAnchor(bounds) === href;
+    if (active && anchorHelper) {
+      anchorHelper.setActiveAnchor(this._component);
+    }
   }
 
-  getChildContext() {
-    return {
-      anchorHelper: this.context.anchorHelper,
-    };
+  componentDidMount() {
+    this.setActiveAnchor();
+  }
+
+  componentDidUpdate() {
+    this.setActiveAnchor();
   }
 
   renderAnchorLink = (child) => {
@@ -47,19 +52,24 @@ export default class AnchorLink extends React.Component<AnchorLinkProps, any> {
     if (href) {
       this.context.anchorHelper.addLink(href);
       return React.cloneElement(child, {
-        onClick: this.context.anchorHelper.scrollTo,
+        onClick: this.props.onClick,
         prefixCls: this.props.prefixCls,
+        affix: this.props.affix,
       });
     }
     return child;
   }
 
+  refsTo = (component) => {
+    this._component = component;
+  }
+
   scrollTo = (e) => {
+    e.preventDefault();
     const { onClick, href } = this.props;
     const { anchorHelper } = this.context;
-    e.preventDefault();
     if (onClick) {
-      onClick(href);
+      onClick(href, this._component);
     } else {
       e.stopPreventDefault();
       const scrollToFn = anchorHelper ? anchorHelper.scrollTo : scrollTo;
@@ -78,7 +88,7 @@ export default class AnchorLink extends React.Component<AnchorLinkProps, any> {
     return (
       <div className={cls}>
         <a
-          ref={(component) => component && active && anchorHelper ? anchorHelper.setActiveAnchor(component) : null}
+          ref={this.refsTo}
           className={`${prefixCls}-link-title`}
           onClick={this.scrollTo}
           href={href}

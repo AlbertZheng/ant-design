@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import { FormattedMessage } from 'react-intl';
 import ScrollElement from 'rc-scroll-anim/lib/ScrollElement';
 import GitHubButton from 'react-github-button';
-import 'react-github-button/assets/style.css';
 import { Icon } from 'antd';
 import QueueAnim from 'rc-queue-anim';
 
@@ -19,7 +18,7 @@ function typeFunc(a) {
 export default function Banner({ location, onEnterChange }) {
   const query = location.query;
   return (
-    <section id="banner" className="page">
+    <section className="page banner-wrapper">
       <ScrollElement id="banner" onChange={({ mode }) => onEnterChange(mode)}>
         <QueueAnim className="banner-text-wrapper" type={typeFunc} delay={300} key="banner">
           <h2 key="h2">ANT <p>DESIGN</p></h2>

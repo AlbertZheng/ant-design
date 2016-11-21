@@ -98,9 +98,9 @@
 }
 
 .markdown pre {
-  border-radius: 6px;
+  border-radius: @border-radius-base;
   background: #f7f7f7;
-  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-family: "Lucida Console", Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 }
 
 .markdown pre code {
@@ -177,7 +177,7 @@
     color: #999;
 
     &:hover {
-      color: #2db7f5;
+      color: @primary-color;
     }
   }
 
@@ -203,7 +203,7 @@
 }
 
 .markdown.api-container table {
-  font-family: Consolas, Menlo, Courier, monospace;
+  font-family: "Lucida Console", Consolas, Menlo, Courier, monospace;
   font-size: 13px;
   td:first-child {
     background: #fcfcfc;

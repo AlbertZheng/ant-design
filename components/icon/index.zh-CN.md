@@ -104,7 +104,7 @@ ul.anticons-list li:after {
   content: "Copied!";
   text-align: center;
   line-height: 110px;
-  color: #2db7f5;
+  color: #108ee9;
   transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
   opacity: 0;
 }
@@ -124,7 +124,7 @@ ul.anticons-list li:hover .anticon {
   display: block;
   text-align: center;
   transform: scale(0.83);
-  font-family: Consolas;
+  font-family: "Lucida Console", Consolas;
   white-space: nowrap;
 }
 </style>

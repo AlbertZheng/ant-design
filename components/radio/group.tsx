@@ -30,6 +30,8 @@ export interface RadioGroupProps {
   size?: 'large' | 'default' | 'small';
   style?: React.CSSProperties;
   disabled?: boolean;
+  onMouseEnter?: React.FormEventHandler<any>;
+  onMouseLeave?: React.FormEventHandler<any>;
 }
 
 export default class RadioGroup extends React.Component<RadioGroupProps, any> {
@@ -84,11 +86,7 @@ export default class RadioGroup extends React.Component<RadioGroupProps, any> {
     const props = this.props;
     const children = !props.children ? [] : React.Children.map(props.children, (radio: any) => {
       if (radio && (radio.type === Radio || radio.type === RadioButton) && radio.props) {
-        const keyProps = {};
-        if (!('key' in radio) && typeof radio.props.value === 'string') {
-          (keyProps as any).key = radio.props.value;
-        }
-        return React.cloneElement(radio, assign({}, keyProps, radio.props, {
+        return React.cloneElement(radio, assign({}, radio.props, {
           onChange: this.onRadioChange,
           checked: this.state.value === radio.props.value,
           disabled: radio.props.disabled || this.props.disabled,
@@ -103,6 +101,15 @@ export default class RadioGroup extends React.Component<RadioGroupProps, any> {
       [`${prefixCls}-${props.size}`]: props.size,
       [className]: className,
     });
-    return <div className={classString} style={props.style}>{children}</div>;
+    return (
+      <div
+        className={classString}
+        style={props.style}
+        onMouseEnter={props.onMouseEnter}
+        onMouseLeave={props.onMouseLeave}
+      >
+        {children}
+      </div>
+    );
   }
 }
