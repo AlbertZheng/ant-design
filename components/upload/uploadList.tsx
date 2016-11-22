@@ -30,12 +30,11 @@ export default class UploadList extends React.Component<UploadListProps, any> {
   }
 
   handlePreview = (file, e) => {
-    e.preventDefault();
-    const onPreview = this.props.onPreview;
+    const { onPreview } = this.props;
     if (!onPreview) {
       return;
     }
-
+    e.preventDefault();
     return onPreview(file);
   }
 
@@ -81,10 +80,10 @@ export default class UploadList extends React.Component<UploadListProps, any> {
             <a
               className={`${prefixCls}-list-item-thumbnail`}
               onClick={e => this.handlePreview(file, e)}
-              href={file.url}
+              href={file.url || file.thumbUrl}
               target="_blank" rel="noopener noreferrer"
             >
-              <img src={file.thumbUrl || file.url} alt={file.name} />
+              <img src={file.url || file.thumbUrl} alt={file.name} />
             </a>
           );
         }
@@ -130,16 +129,20 @@ export default class UploadList extends React.Component<UploadListProps, any> {
               ? (
                 <span>
                   <a
-                    href={file.url}
-                    target="_blank" rel="noopener noreferrer"
-                    style={{ pointerEvents: file.url || file.thumbUrl ? '' : 'none' }}
+                    href={file.url || file.thumbUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={(file.url || file.thumbUrl) ? undefined : {
+                      pointerEvents: 'none',
+                      opacity: 0.5,
+                    }}
                     onClick={e => this.handlePreview(file, e)}
                   >
                     <Icon type="eye-o" />
                   </a>
-                  <Icon type="delete" onClick={() => this.handleClose(file)} />
+                  <Icon type="delete" title="Remove file" onClick={() => this.handleClose(file)} />
                 </span>
-              ) : <Icon type="cross" onClick={() => this.handleClose(file)} />
+              ) : <Icon type="cross" title="Remove file" onClick={() => this.handleClose(file)} />
             }
           </div>
           {progress}

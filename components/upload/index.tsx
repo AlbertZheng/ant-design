@@ -61,6 +61,7 @@ export default class Upload extends React.Component<UploadProps, any> {
   static Dragger = Dragger;
 
   static defaultProps = {
+    prefixCls: 'ant-upload',
     type: 'select',
     multiple: false,
     action: '',
@@ -71,6 +72,7 @@ export default class Upload extends React.Component<UploadProps, any> {
     listType: 'text', // or pictrue
     className: '',
     disabled: false,
+    supportServerRender: true,
   };
 
   recentUploadStatus: boolean | PromiseLike<any>;
@@ -237,7 +239,7 @@ export default class Upload extends React.Component<UploadProps, any> {
 
   render() {
     const {
-      prefixCls = 'ant-upload', showUploadList, listType, onPreview,
+      prefixCls = '', showUploadList, listType, onPreview,
       type, disabled, children, className,
     } = this.props;
 
